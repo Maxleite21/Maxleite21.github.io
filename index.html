@@ -2,19 +2,35 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Presentes Reservados - Chá de Panela</title>
+  <title>Escolha seu Presente - Chá de Panela</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <style>
     body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
     .container { max-width: 600px; margin: auto; background: #fff; border-radius: 10px; box-shadow: 0 2px 12px #ddd; padding: 30px; }
     h1 { color: #8a4baf; }
-    h2 { color: #333; margin-top: 24px;}
-    .categoria { margin-bottom: 18px; }
-    ul { list-style: none; padding-left: 0; }
-    li { padding: 6px 0; border-bottom: 1px solid #f0f0f0; }
-    .presente { font-weight: bold; }
-    .nome { color: #8a4baf; font-style: italic; }
-    .vazio { color: #888; }
+    label { display: block; margin-top: 20px; font-weight: bold; }
+    input, select, button {
+      width: 100%; padding: 10px; margin-top: 6px; border: 1px solid #ccc; border-radius: 5px;
+    }
+    button {
+      background-color: #8a4baf; color: #fff; border: none; cursor: pointer; margin-top: 20px;
+    }
+    button:hover {
+      background-color: #6b3890;
+    }
+    .mensagem {
+      margin-top: 20px;
+      padding: 12px;
+      border-radius: 6px;
+    }
+    .sucesso {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    .erro {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
     @media (max-width:700px) {
       .container { max-width: 98vw; padding: 6vw 2vw; }
     }
@@ -22,35 +38,57 @@
 </head>
 <body>
   <div class="container">
-    <h1>Presentes Reservados</h1>
-    <div id="reservados"></div>
+    <h1>Confirme seu Presente</h1>
+    <form id="form">
+      <label for="nome">Seu nome:</label>
+      <input type="text" id="nome" name="nome" required>
+
+      <label for="presente">Escolha o presente:</label>
+      <select id="presente" name="presente" required>
+        <option value="">Selecione um presente</option>
+        <option value="Conjunto de panelas">Conjunto de panelas</option>
+        <option value="Jogo de pratos">Jogo de pratos</option>
+        <option value="Liquidificador">Liquidificador</option>
+        <option value="Faqueiro">Faqueiro</option>
+        <!-- Adicione mais opções conforme necessário -->
+      </select>
+
+      <button type="submit">Reservar Presente</button>
+    </form>
+    <div id="mensagem" class="mensagem" style="display:none;"></div>
   </div>
+
   <script>
+    const form = document.getElementById('form');
+    const mensagem = document.getElementById('mensagem');
+
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyUZBTSgB6LpKDE0K-HlISyp1MMg7enbjcunfHHhAsCL9sDwEjAhCX3MawDtpDL4low/exec";
-    fetch(WEB_APP_URL)
-      .then(r => r.json())
-      .then(data => {
-        const div = document.getElementById('reservados');
-        div.innerHTML = '';
-        const categorias = Object.keys(data);
-        if (categorias.length === 0) {
-          div.innerHTML = '<p class="vazio">Nenhum presente reservado ainda.</p>';
-          return;
-        }
-        categorias.forEach(cat => {
-          const catDiv = document.createElement('div');
-          catDiv.className = 'categoria';
-          catDiv.innerHTML = `<h2>${cat}</h2>`;
-          const ul = document.createElement('ul');
-          data[cat].forEach(item => {
-            const li = document.createElement('li');
-            li.innerHTML = `<span class="presente">${item.presente}</span> — <span class="nome">${item.nome}</span>`;
-            ul.appendChild(li);
-          });
-          catDiv.appendChild(ul);
-          div.appendChild(catDiv);
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const nome = document.getElementById('nome').value;
+      const presente = document.getElementById('presente').value;
+
+      fetch(WEB_APP_URL + `?nome=${encodeURIComponent(nome)}&presente=${encodeURIComponent(presente)}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.result === 'success') {
+            mensagem.className = 'mensagem sucesso';
+            mensagem.innerText = 'Presente reservado com sucesso!';
+            mensagem.style.display = 'block';
+            form.reset();
+          } else {
+            mensagem.className = 'mensagem erro';
+            mensagem.innerText = 'Erro ao reservar presente. Tente novamente.';
+            mensagem.style.display = 'block';
+          }
+        })
+        .catch(error => {
+          mensagem.className = 'mensagem erro';
+          mensagem.innerText = 'Erro na conexão. Tente novamente.';
+          mensagem.style.display = 'block';
         });
-      });
+    });
   </script>
 </body>
 </html>
