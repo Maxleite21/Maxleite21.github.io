@@ -2,92 +2,46 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Escolha seu Presente - Chá de Panela</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Chá de Panela - Confirmação</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
-    .container { max-width: 600px; margin: auto; background: #fff; border-radius: 10px; box-shadow: 0 2px 12px #ddd; padding: 30px; }
-    h1 { color: #8a4baf; }
-    label { display: block; margin-top: 20px; font-weight: bold; }
-    input, select, button {
-      width: 100%; padding: 10px; margin-top: 6px; border: 1px solid #ccc; border-radius: 5px;
-    }
-    button {
-      background-color: #8a4baf; color: #fff; border: none; cursor: pointer; margin-top: 20px;
-    }
-    button:hover {
-      background-color: #6b3890;
-    }
-    .mensagem {
-      margin-top: 20px;
-      padding: 12px;
-      border-radius: 6px;
-    }
-    .sucesso {
-      background-color: #d4edda;
-      color: #155724;
-    }
-    .erro {
-      background-color: #f8d7da;
-      color: #721c24;
-    }
-    @media (max-width:700px) {
-      .container { max-width: 98vw; padding: 6vw 2vw; }
-    }
+    body { font-family: Arial, sans-serif; background: #f5f5f5; padding: 20px; }
+    form { background: #fff; padding: 20px; border-radius: 8px; max-width: 400px; margin: auto; }
+    input, select, button { margin-top: 10px; width: 100%; padding: 8px; }
+    .msg { margin-top: 15px; color: green; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Confirme seu Presente</h1>
-    <form id="form">
-      <label for="nome">Seu nome:</label>
-      <input type="text" id="nome" name="nome" required>
-
-      <label for="presente">Escolha o presente:</label>
-      <select id="presente" name="presente" required>
-        <option value="">Selecione um presente</option>
-        <option value="Conjunto de panelas">Conjunto de panelas</option>
-        <option value="Jogo de pratos">Jogo de pratos</option>
-        <option value="Liquidificador">Liquidificador</option>
-        <option value="Faqueiro">Faqueiro</option>
-        <!-- Adicione mais opções conforme necessário -->
-      </select>
-
-      <button type="submit">Reservar Presente</button>
-    </form>
-    <div id="mensagem" class="mensagem" style="display:none;"></div>
-  </div>
-
+  <h2>Confirme sua presença e escolha o presente!</h2>
+  <form id="rsvpForm">
+    <input type="text" name="nome" placeholder="Seu nome" required>
+    <select name="produto" required>
+      <option value="">Escolha um produto...</option>
+      <option value="Panela">Panela</option>
+      <option value="Talheres">Talheres</option>
+      <option value="Toalha">Toalha</option>
+      <option value="Copos">Copos</option>
+      <option value="Pratos">Pratos</option>
+    </select>
+    <button type="submit">Confirmar</button>
+    <div class="msg" id="confMsg" style="display:none;">Presença e presente registrados!</div>
+  </form>
   <script>
-    const form = document.getElementById('form');
-    const mensagem = document.getElementById('mensagem');
-
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyUZBTSgB6LpKDE0K-HlISyp1MMg7enbjcunfHHhAsCL9sDwEjAhCX3MawDtpDL4low/exec";
-
-    form.addEventListener('submit', function(e) {
+    document.getElementById('rsvpForm').addEventListener('submit', function(e){
       e.preventDefault();
-      const nome = document.getElementById('nome').value;
-      const presente = document.getElementById('presente').value;
-
-      fetch(WEB_APP_URL + `?nome=${encodeURIComponent(nome)}&presente=${encodeURIComponent(presente)}`)
-        .then(response => response.json())
-        .then(data => {
-          if (data.result === 'success') {
-            mensagem.className = 'mensagem sucesso';
-            mensagem.innerText = 'Presente reservado com sucesso!';
-            mensagem.style.display = 'block';
-            form.reset();
-          } else {
-            mensagem.className = 'mensagem erro';
-            mensagem.innerText = 'Erro ao reservar presente. Tente novamente.';
-            mensagem.style.display = 'block';
-          }
-        })
-        .catch(error => {
-          mensagem.className = 'mensagem erro';
-          mensagem.innerText = 'Erro na conexão. Tente novamente.';
-          mensagem.style.display = 'block';
-        });
+      const nome = e.target.nome.value;
+      const produto = e.target.produto.value;
+      // Troque a URL abaixo pelo endpoint do seu SheetDB!
+      fetch('https://sheetdb.io/api/v1/YOUR_SHEET_DB_ID', {
+        method: 'POST',
+        body: JSON.stringify({ data: { nome, produto } }),
+        headers: { 'Content-Type': 'application/json' }
+      }).then(() => {
+        document.getElementById('confMsg').style.display = 'block';
+        e.target.reset();
+      }).catch(() => {
+        document.getElementById('confMsg').textContent = 'Erro ao registrar. Tente novamente!';
+        document.getElementById('confMsg').style.display = 'block';
+      });
     });
   </script>
 </body>
