@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chá de Cozinha - Mel & Max</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9f9f7;
+      color: #333;
+      background-image: url('https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+      background-size: cover;
+      background-attachment: fixed;
+      background-position: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 20px auto;
+      background-color: rgba(255, 255, 255, 0.95);
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      backdrop-filter: blur(10px);
+    }
+
+    h1 {
+      text-align: center;
+      color: #4a5d23;
+      font-size: 2.2em;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #6b8e23;
+      font-style: italic;
+      margin-bottom: 30px;
+    }
+
+    .intro {
+      background-color: #f0f5e6;
+      padding: 15px;
+      border-left: 4px solid #6b8e23;
+      border-radius: 8px;
+      margin-bottom: 30px;
+      color: #555;
+      font-size: 1em;
+      line-height: 1.6;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    input[type="text"] {
+      padding: 12px;
+      width: 80%;
+      max-width: 400px;
+      border: 2px solid #c8d5a7;
+      border-radius: 8px;
+      font-size: 16px;
+      outline: none;
+    }
+
+    input[type="text"]:focus {
+      border-color: #6b8e23;
+    }
+
+    .category {
+      margin-bottom: 30px;
+      border-bottom: 1px solid #e0e0e0;
+      padding-bottom: 15px;
+    }
+
+    .category h2 {
+      color: #4a5d23;
+      border-left: 5px solid #6b8e23;
+      padding-left: 10px;
+      margin-bottom: 15px;
+    }
+
+    .item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 15px;
+      background-color: #f8f9f2;
+      margin-bottom: 8px;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .item button {
+      background-color: #6b8e23;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+
+    .item button:hover {
+      background-color: #5a751e;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      color: #777;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Chá de Cozinha</h1>
+    <p class="subtitle">Mel & Max ❤️</p>
+
+    <div class="intro">
+      Olá pessoal, estamos organizando a lista do chá de cozinha, vamos enviar várias sugestões! Façam suas escolhas, podendo ser da lista ou não, mas informem o item escolhido por favor! fiquem à vontade para escolher 😘
+    </div>
+
+    <div class="input-group">
+      <input type="text" id="userName" placeholder="Seu nome" />
+    </div>
+
+    <!-- CATEGORIAS -->
+    <div id="eletrodomesticos" class="category">
+      <h2>Eletrodomésticos</h2>
+      <div class="items-list">
+        <div class="item" data-item="Liquidificador (Oster)"><span>Liquidificador (Oster)</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Sanduicheira (Oster)"><span>Sanduicheira (Oster)</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Espremedor de laranja elétrico"><span>Espremedor de laranja elétrico</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Centrífuga de frutas e folhas"><span>Centrífuga de frutas e folhas</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Mini processador de alho/cebola"><span>Mini processador de alho/cebola</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Chaleira (com apito, elétrica ou comum)"><span>Chaleira (com apito, elétrica ou comum)</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Garrafa de Café térmica"><span>Garrafa de Café térmica</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Garrafa de Chá térmica"><span>Garrafa de Chá térmica</span><button onclick="confirmar(this)">Confirmar</button></div>
+      </div>
+    </div>
+
+    <div id="utensilios" class="category">
+      <h2>Utensílios de Cozinha</h2>
+      <div class="items-list">
+        <div class="item" data-item="Abridor de latas padrão"><span>Abridor de latas padrão</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Descascador de legumes"><span>Descascador de legumes</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Espremedor de limão"><span>Espremedor de limão</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Amassador de batata"><span>Amassador de batata</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Pegador de macarrão"><span>Pegador de macarrão</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Pegador de salada"><span>Pegador de salada</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Tesoura de cozinha"><span>Tesoura de cozinha</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Fouê"><span>Fouê</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Pincel de silicone"><span>Pincel de silicone</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Rolo para abrir massa"><span>Rolo para abrir massa</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Colher de sorvete"><span>Colher de sorvete</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Luva térmica"><span>Luva térmica</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Avental de louça"><span>Avental de louça</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Spray de azeite"><span>Spray de azeite</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Kit de funil"><span>Kit de funil</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Colheres de medida"><span>Colheres de medida</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Copos medidores"><span>Copos medidores</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Organizador de facas"><span>Organizador de facas</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Suporte de coador de café"><span>Suporte de coador de café</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Tábua de carne (vidro ou polietileno)"><span>Tábua de carne (vidro ou polietileno)</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Jogo de peneiras inox"><span>Jogo de peneiras inox</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Talheres siliconados (por inteiro)"><span>Talheres siliconados (por inteiro)</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Talheres inox"><span>Talheres inox</span><button onclick="confirmar(this)">Confirmar</button></div>
+      </div>
+    </div>
+
+    <div id="panelas" class="category">
+      <h2>Panelas e Assadeiras</h2>
+      <div class="items-list">
+        <div class="item" data-item="Assadeiras (torta, fundo falso, pães, pudim)"><span>Assadeiras (torta, fundo falso, pães, pudim)</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Forma de bolo com e sem furo"><span>Forma de bolo com e sem furo</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Frigideiras (de indução)"><span>Frigideiras (de indução)</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Panela pipoqueira indução"><span>Panela pipoqueira indução</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Cuscuzeira indução"><span>Cuscuzeira indução</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Travessa e refratários de vidro ou porcelana branca"><span>Travessa e refratários de vidro ou porcelana branca</span><button onclick="confirmar(this)">Confirmar</button></div>
+      </div>
+    </div>
+
+    <div id="loucas" class="category">
+      <h2>Louças, Copos e Itens de Mesa</h2>
+      <div class="items-list">
+        <div class="item" data-item="Jogo de xícaras (vidro, porcelana)"><span>Jogo de xícaras (vidro, porcelana)</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Pratos (brancos ou nas cores da paleta)"><span>Pratos (brancos ou nas cores da paleta)</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Jarras de vidro"><span>Jarras de vidro</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Copos de vidro"><span>Copos de vidro</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Taça de sobremesa"><span>Taça de sobremesa</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Taças"><span>Taças</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Faqueiro"><span>Faqueiro</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Potes (vários tamanhos)"><span>Potes (vários tamanhos)</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Potes para mantimentos (herméticos, vidro ou policarbonato)"><span>Potes para mantimentos (herméticos, vidro ou policarbonato)</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Porta copos para mesa"><span>Porta copos para mesa</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Descanso de panela para mesa"><span>Descanso de panela para mesa</span><button onclick="confirmar(this)">Confirmar</button></div>
+      </div>
+    </div>
+
+    <div id="limpeza" class="category">
+      <h2>Limpeza e Organização</h2>
+      <div class="items-list">
+        <div class="item" data-item="Panos de prato"><span>Panos de prato</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Baldes de plástico (limpeza)"><span>Baldes de plástico (limpeza)</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Pá de lixo"><span>Pá de lixo</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Pregadores de roupa (plásticos)"><span>Pregadores de roupa (plásticos)</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Rodo"><span>Rodo</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Vassoura"><span>Vassoura</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Panos de chão"><span>Panos de chão</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Escova para vaso sanitário"><span>Escova para vaso sanitário</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Jogos de tapetes (banheiro)"><span>Jogos de tapetes (banheiro)</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Tapete antiaderente (banheiro)"><span>Tapete antiaderente (banheiro)</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Jogos de tapetes (cozinha)"><span>Jogos de tapetes (cozinha)</span><button onclick="confirmar(this)">Confirmar</button></div>
+      </div>
+    </div>
+
+    <div id="cama-banho" class="category">
+      <h2>Cama e Banho</h2>
+      <div class="items-list">
+        <div class="item" data-item="Toalha de banho (banhão)"><span>Toalha de banho (banhão)</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Toalha de rosto (kit banheiro)"><span>Toalha de rosto (kit banheiro)</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Jogo de toalha (casal banho e rosto)"><span>Jogo de toalha (casal banho e rosto)</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Jogo de lençol (cama casal comum)"><span>Jogo de lençol (cama casal comum)</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Lençol elástico (cama casal comum)"><span>Lençol elástico (cama casal comum)</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Lençol cobre leito ou manta de cama"><span>Lençol cobre leito ou manta de cama</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Manta sofá (cores pastéis)"><span>Manta sofá (cores pastéis)</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Edredom (antialérgico)"><span>Edredom (antialérgico)</span><button onclick="confirmar(this)">Confirmar</button></div>
+        <div class="item" data-item="Cobertor (casal ou mantinha)"><span>Cobertor (casal ou mantinha)</span><button onclick="confirmar(this)">Confirmar</button></div>
+      </div>
+    </div>
+
+    <div class="footer">
+      Todos os presentes são muito bem-vindos! ❤️
+    </div>
+  </div>
+
+  <script>
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyR3kG-bCXxsPGGXbhgfg8EZtopmLBTK4mngY01PLoPQBy7mHgQp4Ll4kvdXjc_9WRZ/exec';
+
+    function confirmar(button) {
+      const userName = document.getElementById('userName').value.trim();
+      if (!userName) {
+        alert('Por favor, digite seu nome antes de confirmar.');
+        return;
+      }
+
+      const itemElement = button.parentElement;
+      const item = itemElement.getAttribute('data-item');
+      const categoria = itemElement.parentElement.parentElement.querySelector('h2').textContent;
+
+      const data = {
+        nome: userName,
+        categoria: categoria,
+        item: item
+      };
+
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = WEB_APP_URL;
+      form.target = 'hiddenFrame';
+
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'data';
+      input.value = JSON.stringify(data);
+      form.appendChild(input);
+
+      document.body.appendChild(form);
+
+      const frame = document.createElement('iframe');
+      frame.name = 'hiddenFrame';
+      frame.style.display = 'none';
+      document.body.appendChild(frame);
+
+      frame.onload = () => {
+        itemElement.classList.add('hidden');
+        alert(`Obrigado, ${userName}! Você escolheu: ${item}.`);
+        document.body.removeChild(form);
+        document.body.removeChild(frame);
+      };
+
+      frame.onerror = () => {
+        alert('Erro ao enviar. Tente novamente.');
+      };
+
+      form.submit();
+    }
+  </script>
+</body>
+</html>
