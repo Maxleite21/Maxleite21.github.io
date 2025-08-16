@@ -1,48 +1,106 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Chá de Panela - Confirmação</title>
-  <style>
-    body { font-family: Arial, sans-serif; background: #f5f5f5; padding: 20px; }
-    form { background: #fff; padding: 20px; border-radius: 8px; max-width: 400px; margin: auto; }
-    input, select, button { margin-top: 10px; width: 100%; padding: 8px; }
-    .msg { margin-top: 15px; color: green; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chá de Cozinha - Mel & Max</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: Arial, sans-serif; background-color: #f9f9f9; }
+  .bg-olive { background-color: #6b8e23; }
+  .text-olive { color: #6b8e23; }
+  button { cursor: pointer; }
+</style>
 </head>
-<body>
-  <h2>Confirme sua presença e escolha o presente!</h2>
-  <form id="rsvpForm">
-    <input type="text" name="nome" placeholder="Seu nome" required>
-    <select name="produto" required>
-      <option value="">Escolha um produto...</option>
-      <option value="Panela">Panela</option>
-      <option value="Talheres">Talheres</option>
-      <option value="Toalha">Toalha</option>
-      <option value="Copos">Copos</option>
-      <option value="Pratos">Pratos</option>
-    </select>
-    <button type="submit">Confirmar</button>
-    <div class="msg" id="confMsg" style="display:none;">Presença e presente registrados!</div>
-  </form>
-  <script>
-    document.getElementById('rsvpForm').addEventListener('submit', function(e){
-      e.preventDefault();
-      const nome = e.target.nome.value;
-      const produto = e.target.produto.value;
-      // Troque a URL abaixo pelo endpoint do seu SheetDB!
-      fetch('https://sheetdb.io/api/v1/YOUR_SHEET_DB_ID', {
-        method: 'POST',
-        body: JSON.stringify({ data: { nome, produto } }),
-        headers: { 'Content-Type': 'application/json' }
-      }).then(() => {
-        document.getElementById('confMsg').style.display = 'block';
-        e.target.reset();
-      }).catch(() => {
-        document.getElementById('confMsg').textContent = 'Erro ao registrar. Tente novamente!';
-        document.getElementById('confMsg').style.display = 'block';
-      });
+<body class="min-h-screen flex flex-col items-center py-10">
+
+<header class="mb-8 text-center">
+  <h1 class="text-4xl font-bold text-olive">Chá de Cozinha - Mel & Max</h1>
+  <p class="text-lg mt-2 text-gray-700">Digite seu nome, escolha um presente e confirme.</p>
+</header>
+
+<main class="w-full max-w-3xl px-4">
+
+  <div class="mb-6">
+    <label class="block mb-2 text-gray-700 font-semibold">Seu nome:</label>
+    <input id="nomeConvidado" type="text" placeholder="Ex.: Ana Silva" class="w-full px-3 py-2 border rounded-lg">
+  </div>
+
+  <div id="listaPresentes" class="space-y-8"></div>
+</main>
+
+<script>
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby1aLvTpLJV6Cg2wIXMZScuylOnWi75sqVvFCLcFjmrXWjNtXO6SrMjtJyiualoXZrf/exec";
+
+const categorias = {
+  "Eletrodomésticos": ["Liquidificador (Oster)","Sanduicheira (Oster)","Espremedor de laranja elétrico","Centrífuga de frutas e folhas","Mini processador de alho/cebola","Chaleira (com apito, elétrica ou comum)","Garrafa de Café térmica","Garrafa de Chá térmica"],
+  "Utensílios de Cozinha": ["Abridor de latas padrão","Descascador de legumes","Espremedor de limão","Amassador de batata","Pegador de macarrão","Pegador de salada","Tesoura de cozinha","Fouê","Pincel de silicone","Rolo para abrir massa","Colher de sorvete","Luva térmica","Avental de louça","Spray de azeite","Kit de funil","Colheres de medida","Copos medidores","Organizador de facas","Suporte de coador de café","Tábua de carne","Jogo de peneiras inox","Talheres siliconados","Talheres inox"],
+  "Panelas e Assadeiras": ["Assadeiras (torta, fundo falso, pães, pudim)","Forma de bolo com e sem furo","Frigideiras (de indução)","Panela pipoqueira indução","Cuscuzeira indução","Travessa e refratários de vidro ou porcelana branca"],
+  "Louças, Copos e Itens de Mesa": ["Jogo de xícaras (vidro, porcelana)","Pratos (brancos ou nas cores da paleta)","Jarras de vidro","Copos de vidro","Taça de sobremesa","Taças","Faqueiro","Potes (vários tamanhos)","Potes para mantimentos","Porta copos para mesa","Descanso de panela para mesa"],
+  "Limpeza e Organização": ["Panos de prato","Baldes de plástico (limpeza)","Pá de lixo","Pregadores de roupa (plásticos)","Rodo","Vassoura","Panos de chão","Escova para vaso sanitário","Jogos de tapetes (banheiro)","Tapete antiaderente (banheiro)","Jogos de tapetes (cozinha)"],
+  "Cama e Banho": ["Toalha de banho (banhão)","Toalha de rosto (kit banheiro)","Jogo de toalha (casal banho e rosto)","Jogo de lençol (cama casal comum)","Lençol elástico (cama casal comum)","Lençol cobre leito ou manta de cama","Manta sofá (cores pastéis)","Edredom (antialérgico)","Cobertor (casal ou mantinha)"]
+};
+
+function renderLista() {
+  const container = document.getElementById('listaPresentes');
+  container.innerHTML = '';
+
+  Object.keys(categorias).forEach(cat => {
+    const sec = document.createElement('section');
+    sec.className = "bg-white shadow-md rounded-xl p-6";
+    const header = document.createElement('h2');
+    header.className = "text-2xl font-bold text-olive mb-4";
+    header.textContent = cat;
+
+    const lista = document.createElement('ul');
+    lista.className = "space-y-3";
+
+    categorias[cat].forEach(item => {
+      const li = document.createElement('li');
+      li.className = "flex justify-between items-center border-b pb-2";
+
+      const nomeItem = document.createElement('span');
+      nomeItem.textContent = item;
+
+      const btn = document.createElement('button');
+      btn.className = "px-3 py-1 rounded-lg text-white bg-olive hover:bg-green-700";
+      btn.textContent = "Confirmar";
+      btn.onclick = () => confirmarItem(item, cat, li);
+
+      li.appendChild(nomeItem);
+      li.appendChild(btn);
+      lista.appendChild(li);
     });
-  </script>
+
+    sec.appendChild(header);
+    sec.appendChild(lista);
+    container.appendChild(sec);
+  });
+}
+
+function confirmarItem(item, categoria, liElement) {
+  const nome = document.getElementById('nomeConvidado').value.trim();
+  if (!nome) { alert('Digite seu nome antes de confirmar.'); return; }
+
+  fetch(WEB_APP_URL, {
+    method: 'POST',
+    body: JSON.stringify({nome, categoria, item}),
+    headers: {'Content-Type': 'application/json'}
+  })
+  .then(res => res.json())
+  .then(res => {
+    if (res.status === 'success') {
+      alert(`Item "${item}" confirmado com sucesso!`);
+      liElement.remove();
+    } else {
+      alert('Erro ao salvar: ' + res.message);
+    }
+  })
+  .catch(err => alert('Erro de rede: ' + err.message));
+}
+
+renderLista();
+</script>
+
 </body>
 </html>
