@@ -1,151 +1,168 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <title>Chá de Cozinha - Mel & Max</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            olive: '#6b8e23',
-            'olive-light': '#c8d5a7'
-          }
-        }
-      }
-    }
-  </script>
+  <meta charset="UTF-8">
+  <title>Chá de Panela — Reserva de Presentes</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <style>
-    body { background-color: #f9f9f7; }
-    button { cursor: pointer; }
+    body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
+    .container { max-width: 600px; margin: auto; background: #fff; border-radius: 10px; box-shadow: 0 2px 12px #ddd; padding: 30px; }
+    h1 { color: #8a4baf; }
+    .tabs { display: flex; justify-content: center; margin-bottom: 24px; }
+    .tab-btn { flex: 1; background: #eee; border: none; padding: 10px; font-size: 1em; cursor: pointer; border-radius: 5px 5px 0 0; margin: 0 2px; }
+    .tab-btn.active { background: #8a4baf; color: #fff; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .presente-list { margin-top: 10px;}
+    .presente-item { padding: 8px 0; border-bottom: 1px solid #ececec; display: flex; justify-content: space-between; align-items: center;}
+    .presente-nome { font-weight: bold; }
+    .categoria { font-size: 0.95em; color: #777; }
+    .reservado { color: #8a4baf; font-style: italic; margin-left:6px; }
+    .reservar-form { display: flex; gap: 10px; margin-top: 14px; align-items: center;}
+    .reservar-form input { padding: 6px; font-size: 1em; border-radius: 4px; border: 1px solid #ccc;}
+    .reservar-form button { padding: 7px 14px; background: #8a4baf; color: #fff; border-radius: 5px; border: none; cursor: pointer;}
+    .reservar-form button:hover { background: #6c398c; }
+    .devolver-btn { background: #e74c3c; color: #fff; border: none; border-radius: 5px; padding: 5px 10px; cursor: pointer;}
+    .devolver-btn:hover { background: #c0392b; }
+    .msg { margin-top: 10px; color: #6c398c; text-align: center; font-size: 1em;}
+    @media (max-width:700px) {
+      .container { max-width: 98vw; padding: 6vw 2vw; }
+      .tabs { flex-direction: column; }
+      .tab-btn { margin-bottom: 4px; border-radius: 5px; }
+    }
   </style>
 </head>
-<body class="min-h-screen flex flex-col items-center py-10 bg-gray-100">
-
-  <header class="mb-6 text-center px-4 max-w-3xl">
-    <h1 class="text-4xl font-bold text-olive mb-4">Chá de Cozinha - Mel & Max</h1>
-    <p class="text-lg text-gray-700 mb-2">
-      Olá pessoal, estamos organizando a lista do chá de cozinha, vamos enviar várias sugestões!
-      Façam suas escolhas, podendo ser da lista ou não, mas informem o item escolhido por favor!
-      Fiquem à vontade para escolher 😘
-    </p>
-  </header>
-
-  <main class="w-full max-w-3xl px-4">
-    <div class="mb-6">
-      <label class="block mb-2 text-gray-700 font-semibold">Seu nome:</label>
-      <input id="nomeConvidado" type="text" placeholder="Ex.: Ana Silva" class="w-full px-3 py-2 border rounded-lg">
+<body>
+  <div class="container">
+    <h1>Chá de Panela</h1>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="showTab('reservar')">Reservar Presente</button>
+      <button class="tab-btn" onclick="showTab('reservados')">Presentes Reservados</button>
     </div>
-    <div id="listaPresentes" class="space-y-8"></div>
-  </main>
-
+    <!-- Reservar presente -->
+    <div id="reservar" class="tab-content active">
+      <div class="presente-list" id="presente-list"></div>
+      <div class="msg" id="msg-reservar"></div>
+    </div>
+    <!-- Presentes reservados -->
+    <div id="reservados" class="tab-content">
+      <div class="presente-list" id="reservados-list"></div>
+      <div class="msg" id="msg-reservados"></div>
+    </div>
+  </div>
   <script>
-    // Lista completa de presentes por categoria
-    const categorias = {
-      "Eletrodomésticos": [
-        "Liquidificador (Oster)", "Sanduicheira (Oster)", "Espremedor de laranja elétrico",
-        "Centrífuga de frutas e folhas", "Mini processador de alho/cebola",
-        "Chaleira (com apito, elétrica ou comum)", "Garrafa de Café térmica", "Garrafa de Chá térmica"
-      ],
-      "Utensílios de Cozinha": [
-        "Abridor de latas padrão", "Descascador de legumes", "Espremedor de limão", "Amassador de batata",
-        "Pegador de macarrão", "Pegador de salada", "Tesoura de cozinha", "Fouê", "Pincel de silicone",
-        "Rolo para abrir massa", "Colher de sorvete", "Luva térmica", "Avental de louça", "Spray de azeite",
-        "Kit de funil", "Colheres de medida", "Copos medidores", "Organizador de facas",
-        "Suporte de coador de café", "Tábua de carne (vidro ou polietileno)", "Jogo de peneiras inox",
-        "Talheres siliconados (por inteiro)", "Talheres inox"
-      ],
-      "Panelas e Assadeiras": [
-        "Assadeiras (torta, fundo falso, pães, pudim)", "Forma de bolo com e sem furo",
-        "Frigideiras (de indução)", "Panela pipoqueira indução", "Cuscuzeira indução",
-        "Travessa e refratários de vidro ou porcelana branca"
-      ],
-      "Louças, Copos e Itens de Mesa": [
-        "Jogo de xícaras (vidro, porcelana)", "Pratos (brancos ou nas cores da paleta)",
-        "Jarras de vidro", "Copos de vidro", "Taça de sobremesa", "Taças", "Faqueiro",
-        "Potes (vários tamanhos)", "Potes para mantimentos (herméticos, vidro ou policarbonato)",
-        "Porta copos para mesa", "Descanso de panela para mesa"
-      ],
-      "Limpeza e Organização": [
-        "Panos de prato", "Baldes de plástico (limpeza)", "Pá de lixo", "Pregadores de roupa (plásticos)",
-        "Rodo", "Vassoura", "Panos de chão", "Escova para vaso sanitário", "Jogos de tapetes (banheiro)",
-        "Tapete antiaderente (banheiro)", "Jogos de tapetes (cozinha)"
-      ],
-      "Cama e Banho": [
-        "Toalha de banho (banhão)", "Toalha de rosto (kit banheiro)", "Jogo de toalha (casal banho e rosto)",
-        "Jogo de lençol (cama casal comum)", "Lençol elástico (cama casal comum)",
-        "Lençol cobre leito ou manta de cama", "Manta sofá (cores pastéis)", "Edredom (antialérgico)",
-        "Cobertor (casal ou mantinha)"
-      ]
-    };
+    // Exemplo de presentes (adicione ou edite como quiser)
+    const PRESENTES = [
+      { nome: "Jogo de Toalhas", categoria: "Banheiro" },
+      { nome: "Conjunto de Panelas", categoria: "Cozinha" },
+      { nome: "Jarra de Vidro", categoria: "Cozinha" },
+      { nome: "Prato Decorativo", categoria: "Mesa" },
+      { nome: "Avental", categoria: "Cozinha" },
+      { nome: "Tapete", categoria: "Sala" }
+    ];
 
-    // Carregar itens confirmados do localStorage
-    let confirmados = JSON.parse(localStorage.getItem('presentesConfirmados')) || [];
+    // Salva e carrega as reservas no localStorage
+    function getReservados() {
+      try {
+        return JSON.parse(localStorage.getItem('reservados')) || {};
+      } catch { return {}; }
+    }
+    function setReservados(obj) {
+      localStorage.setItem('reservados', JSON.stringify(obj));
+    }
 
-    // Função para renderizar a lista de presentes
-    function renderLista() {
-      const container = document.getElementById('listaPresentes');
-      container.innerHTML = '';
+    // Tabs
+    function showTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(tabc => tabc.classList.remove('active'));
+      document.querySelector(`.tab-btn[onclick*="${tab}"]`).classList.add('active');
+      document.getElementById(tab).classList.add('active');
+      if (tab === 'reservar') renderReservar();
+      else renderReservados();
+    }
 
-      Object.keys(categorias).forEach(cat => {
-        const sec = document.createElement('section');
-        sec.className = "bg-white shadow-md rounded-xl p-6";
-        const header = document.createElement('h2');
-        header.className = "text-xl font-bold text-olive mb-4";
-        header.textContent = cat;
-
-        const lista = document.createElement('ul');
-        lista.className = "space-y-3";
-
-        categorias[cat].forEach(item => {
-          const jaConfirmado = confirmados.find(c => c.item === item);
-          if (jaConfirmado) return;
-
-          const li = document.createElement('li');
-          li.className = "flex justify-between items-center border-b pb-2";
-
-          const nomeItem = document.createElement('span');
-          nomeItem.textContent = item;
-
-          const btn = document.createElement('button');
-          btn.className = "px-3 py-1 rounded-lg text-white bg-olive hover:bg-green-700";
-          btn.textContent = "Confirmar";
-          btn.onclick = () => confirmarItem(item, cat);
-
-          li.appendChild(nomeItem);
-          li.appendChild(btn);
-          lista.appendChild(li);
-        });
-
-        sec.appendChild(header);
-        sec.appendChild(lista);
-        container.appendChild(sec);
+    // Renderiza aba de reservar presente
+    function renderReservar() {
+      const reservados = getReservados();
+      const div = document.getElementById('presente-list');
+      div.innerHTML = '';
+      PRESENTES.forEach((p, idx) => {
+        const reservadoPor = reservados[p.nome];
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'presente-item';
+        itemDiv.innerHTML = `
+          <div>
+            <span class="presente-nome">${p.nome}</span>
+            <span class="categoria">(${p.categoria})</span>
+            ${reservadoPor ? `<span class="reservado">Reservado por ${reservadoPor}</span>` : ""}
+          </div>
+          ${!reservadoPor ? `
+            <form class="reservar-form" onsubmit="reservar(event, '${p.nome}')">
+              <input required maxlength="20" type="text" placeholder="Seu nome">
+              <button type="submit">Reservar</button>
+            </form>
+          ` : ""}
+        `;
+        div.appendChild(itemDiv);
       });
+      document.getElementById('msg-reservar').innerText = '';
     }
 
-    // Função para confirmar um item
-    function confirmarItem(item, categoria) {
-      const nome = document.getElementById('nomeConvidado').value.trim();
-      if (!nome) {
-        alert('Digite seu nome antes de confirmar.');
-        return;
+    // Função para reservar presente
+    function reservar(e, nomePresente) {
+      e.preventDefault();
+      const reservados = getReservados();
+      if (reservados[nomePresente]) return; // já reservado
+      const nome = e.target.querySelector('input').value.trim();
+      if (!nome) return;
+      reservados[nomePresente] = nome;
+      setReservados(reservados);
+      renderReservar();
+      document.getElementById('msg-reservar').innerText = `Presente reservado por ${nome}!`;
+    }
+
+    // Renderiza aba de reservados
+    function renderReservados() {
+      const reservados = getReservados();
+      const div = document.getElementById('reservados-list');
+      div.innerHTML = '';
+      let temReservados = false;
+      PRESENTES.forEach((p, idx) => {
+        const reservadoPor = reservados[p.nome];
+        if (reservadoPor) {
+          temReservados = true;
+          const itemDiv = document.createElement('div');
+          itemDiv.className = 'presente-item';
+          itemDiv.innerHTML = `
+            <div>
+              <span class="presente-nome">${p.nome}</span>
+              <span class="categoria">(${p.categoria})</span>
+              <span class="reservado">por ${reservadoPor}</span>
+            </div>
+            <button class="devolver-btn" onclick="devolver('${p.nome}')">Devolver</button>
+          `;
+          div.appendChild(itemDiv);
+        }
+      });
+      if (!temReservados) {
+        div.innerHTML = '<p class="vazio">Nenhum presente reservado ainda.</p>';
       }
-
-      // Adiciona à lista de confirmados
-      confirmados.push({ nome, item, categoria });
-
-      // Salva no localStorage (persiste entre sessões)
-      localStorage.setItem('presentesConfirmados', JSON.stringify(confirmados));
-
-      // Atualiza a lista
-      alert(`Obrigado, ${nome}! Você escolheu: ${item}.`);
-      renderLista();
+      document.getElementById('msg-reservados').innerText = '';
     }
 
-    // Renderiza a lista ao carregar
-    renderLista();
+    // Função para devolver presente
+    function devolver(nomePresente) {
+      const reservados = getReservados();
+      if (!reservados[nomePresente]) return;
+      delete reservados[nomePresente];
+      setReservados(reservados);
+      renderReservados();
+      document.getElementById('msg-reservados').innerText = `Presente devolvido!`;
+      renderReservar(); // atualiza a outra aba também
+    }
+
+    // Inicialização
+    renderReservar();
   </script>
 </body>
 </html>
