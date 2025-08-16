@@ -13,12 +13,16 @@
 </head>
 <body class="min-h-screen flex flex-col items-center py-10 bg-gray-100">
 
-  <header class="mb-6 text-center">
-    <h1 class="text-4xl font-bold text-olive">Chá de Cozinha - Mel & Max</h1>
-    <p class="text-lg mt-2 text-gray-700">Escolha um presente ou veja os já confirmados.</p>
+  <header class="mb-6 text-center px-4 max-w-3xl">
+    <h1 class="text-4xl font-bold text-olive mb-4">Chá de Cozinha - Mel & Max</h1>
+    <p class="text-lg text-gray-700 mb-2">
+      Olá pessoal, estamos organizando a lista do chá de cozinha, vamos enviar várias sugestões!
+      Façam suas escolhas, podendo ser da lista ou não, mas informem o item escolhido por favor!
+      Fiquem à vontade para escolher 😘
+    </p>
   </header>
 
-  <!-- Botões de navegação -->
+  <!-- Navegação -->
   <div class="flex space-x-4 mb-6">
     <button onclick="mostrarAba('presentes')" class="bg-olive text-white px-4 py-2 rounded">Escolher Presente</button>
     <button onclick="mostrarAba('confirmados')" class="bg-olive text-white px-4 py-2 rounded">Presentes Confirmados</button>
@@ -41,12 +45,44 @@
 
   <script>
     const categorias = {
-      "Eletrodomésticos": ["Liquidificador (Oster)", "Sanduicheira (Oster)"],
-      "Utensílios de Cozinha": ["Fouê", "Rolo para abrir massa"],
-      "Louças": ["Jogo de xícaras", "Jarras de vidro"]
+      "Eletrodomésticos": [
+        "Liquidificador (Oster)", "Sanduicheira (Oster)", "Espremedor de laranja elétrico",
+        "Centrífuga de frutas e folhas", "Mini processador de alho/cebola",
+        "Chaleira (com apito, elétrica ou comum)", "Garrafa de Café térmica", "Garrafa de Chá térmica"
+      ],
+      "Utensílios de Cozinha": [
+        "Abridor de latas padrão", "Descascador de legumes", "Espremedor de limão", "Amassador de batata",
+        "Pegador de macarrão", "Pegador de salada", "Tesoura de cozinha", "Fouê", "Pincel de silicone",
+        "Rolo para abrir massa", "Colher de sorvete", "Luva térmica", "Avental de louça", "Spray de azeite",
+        "Kit de funil", "Colheres de medida", "Copos medidores", "Organizador de facas",
+        "Suporte de coador de café", "Tábua de carne (vidro ou polietileno)", "Jogo de peneiras inox",
+        "Talheres siliconados (por inteiro)", "Talheres inox"
+      ],
+      "Panelas e Assadeiras": [
+        "Assadeiras (torta, fundo falso, pães, pudim)", "Forma de bolo com e sem furo",
+        "Frigideiras (de indução)", "Panela pipoqueira indução", "Cuscuzeira indução",
+        "Travessa e refratários de vidro ou porcelana branca"
+      ],
+      "Louças, Copos e Itens de Mesa": [
+        "Jogo de xícaras (vidro, porcelana)", "Pratos (brancos ou nas cores da paleta)",
+        "Jarras de vidro", "Copos de vidro", "Taça de sobremesa", "Taças", "Faqueiro",
+        "Potes (vários tamanhos)", "Potes para mantimentos (herméticos, vidro ou policarbonato)",
+        "Porta copos para mesa", "Descanso de panela para mesa"
+      ],
+      "Limpeza e Organização": [
+        "Panos de prato", "Baldes de plástico (limpeza)", "Pá de lixo", "Pregadores de roupa (plásticos)",
+        "Rodo", "Vassoura", "Panos de chão", "Escova para vaso sanitário", "Jogos de tapetes (banheiro)",
+        "Tapete antiaderente (banheiro)", "Jogos de tapetes (cozinha)"
+      ],
+      "Cama e Banho": [
+        "Toalha de banho (banhão)", "Toalha de rosto (kit banheiro)", "Jogo de toalha (casal banho e rosto)",
+        "Jogo de lençol (cama casal comum)", "Lençol elástico (cama casal comum)",
+        "Lençol cobre leito ou manta de cama", "Manta sofá (cores pastéis)", "Edredom (antialérgico)",
+        "Cobertor (casal ou mantinha)"
+      ]
     };
 
-    let confirmados = []; // Armazena localmente
+    let confirmados = [];
 
     function mostrarAba(aba) {
       document.getElementById('aba-presentes').classList.add('hidden');
@@ -71,7 +107,7 @@
 
         categorias[cat].forEach(item => {
           const jaConfirmado = confirmados.find(c => c.item === item);
-          if (jaConfirmado) return; // Pula se já está reservado
+          if (jaConfirmado) return;
 
           const li = document.createElement('li');
           li.className = "flex justify-between items-center border-b pb-2";
@@ -138,7 +174,6 @@
       });
     }
 
-    // Inicializa tudo
     renderLista();
   </script>
 
